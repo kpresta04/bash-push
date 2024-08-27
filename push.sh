@@ -51,10 +51,14 @@ done
 
 branch=$(git symbolic-ref --short HEAD)
 
-# [[ branch =~ ([0-9]+) ]] && echo "${BASH_REMATCH[1]}"
 ticket_number=${branch//[^[:digit:]]/}
 
-echo $ticket_number
+if [ -z "$ticket_number" ]; then
+	echo "No ticket number found in branch name"
+	else
+		ticket_string="(#$ticket_number)"
+		echo $ticket_string
+fi
 
 
 
