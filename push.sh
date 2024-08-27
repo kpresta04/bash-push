@@ -11,38 +11,38 @@ while [[ $# -gt 0 ]]; do
     key="$1"
     case "$key" in
         fix)
-        type="fix: "
+        commit_type="fix:"
         ;;
         feat|feature)
-        type="feat: "
+        commit_type="feat:"
         ;;
         docs)
-        type="docs: "
+        commit_type="docs:"
         ;;
 		style)
-		type="style: "
+		commit_type="style:"
         ;;
 		refactor)
-		type="refactor: "
+		commit_type="refactor:"
 		;;
 		test)
-		type="test: "
+		commit_type="test:"
 		;;
 		chore)
-		type="chore: "
+		commit_type="chore:"
 		;;
 		ci)
-		type="ci: "
+		commit_type="ci:"
 		;;
 		breaking)
-		type="breaking: "
+		commit_type="breaking:"
 		;;
 		perf)
-		type="perf: "
+		commit_type="perf:"
 		;;
         *)
         # Do whatever you want with extra options
-        echo "Unknown option '$key'"
+        echo"Unknown option '$key'"
         ;;
     esac
     # Shift after checking all the cases to get the next option
@@ -57,9 +57,11 @@ if [ -z "$ticket_number" ]; then
 	echo "No ticket number found in branch name"
 	else
 		ticket_string="(#$ticket_number)"
-		echo $ticket_string
 fi
 
 
+read -p "Enter commit message: " commit_msg
 
-echo $type
+
+git commit -m "$commit_type $ticket_string $commit_msg"
+
