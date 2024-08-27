@@ -42,25 +42,31 @@ while [[ $# -gt 0 ]]; do
 		;;
         *)
         # Do whatever you want with extra options
-        echo"Unknown option '$key'"
+        echo "Unknown option '$key'"
+		
         ;;
     esac
     # Shift after checking all the cases to get the next option
     shift
 done
 
+if [ -z "$commit_type" ]; then
+	exit 1
+fi
+
 branch=$(git symbolic-ref --short HEAD)
 
 ticket_number=${branch//[^[:digit:]]/}
 
 if [ -z "$ticket_number" ]; then
-	echo "No ticket number found in branch name"
 	commit_prefix=$commit_type
 	else
 		commit_prefix="$commit_type (#$ticket_number)"
 fi
 
 
-read -p "Enter commit message: " commit_msg
+read -p "Enter commit message: " input_msg
 
-git commit -m "$commit_prefix $commit_msg"
+commit_msg="$commit_prefix $input_msg"
+
+git commit -m "$commit_msg"
