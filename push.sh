@@ -55,13 +55,14 @@ ticket_number=${branch//[^[:digit:]]/}
 
 if [ -z "$ticket_number" ]; then
 	echo "No ticket number found in branch name"
+	commit_prefix=$commit_type
 	else
-		ticket_string="(#$ticket_number)"
+		commit_prefix="$commit_type (#$ticket_number)"
 fi
 
 
 read -p "Enter commit message: " commit_msg
 
 
-git commit -m "$commit_type $ticket_string $commit_msg"
+git commit -m "$commit_prefix $commit_msg"
 
