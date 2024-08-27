@@ -40,6 +40,9 @@ while [[ $# -gt 0 ]]; do
 		perf)
 		commit_type="perf:"
 		;;
+		-n|--no-verify)
+		no_verify=true
+		;;
         *)
         # Do whatever you want with extra options
         echo "Unknown option '$key'"
@@ -69,4 +72,8 @@ read -p "Enter commit message: " input_msg
 
 commit_msg="$commit_prefix $input_msg"
 
-git commit -m "$commit_msg"
+if [ -z "$no_verify" ]; then
+	git commit -m "$commit_msg" -n
+	else
+		git commit -m "$commit_msg"
+fi
