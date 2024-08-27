@@ -63,6 +63,5 @@ fi
 
 read -p "Enter commit message: " commit_msg
 
-
 git commit -m "$commit_prefix $commit_msg"
 
