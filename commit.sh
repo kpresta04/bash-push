@@ -73,7 +73,7 @@ read -p "Enter commit message: " input_msg
 commit_msg="$commit_prefix $input_msg"
 
 if [ -z "$no_verify" ]; then
-	git commit -m "$commit_msg" -n
+	git commit -m "$commit_msg"
 	else
-		git commit -m "$commit_msg"
+		git commit -m "$commit_msg" -n
 fi
