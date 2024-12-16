@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 
@@ -44,10 +43,9 @@ while [[ $# -gt 0 ]]; do
 		no_verify=true
 		;;
         *)
-        # Do whatever you want with extra options
-        echo "Unknown option '$key'"
-		
-        ;;
+		# assume other argument is the commit message
+		input_msg="$key"
+		;;
     esac
     # Shift after checking all the cases to get the next option
     shift
@@ -68,7 +66,6 @@ if [ -z "$ticket_number" ]; then
 fi
 
 
-read -p "Enter commit message: " input_msg
 
 commit_msg="$commit_prefix $input_msg"
 
