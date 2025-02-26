@@ -24,11 +24,24 @@ curl -o git-commit-script.sh https://your-script-location.com/git-commit-script.
 chmod +x git-commit-script.sh
 ```
 
-3. Optional: Move to a directory in your PATH for easy access:
+3. Choose one of these options to make the script easily accessible:
 
-```bash
-sudo mv git-commit-script.sh /usr/local/bin/git-cc
-```
+   **Option A: Move to a directory in your PATH**
+   ```bash
+   sudo mv git-commit-script.sh /usr/local/bin/git-cc
+   ```
+
+   **Option B: Create a Bash alias**
+   
+   Add this line to your `~/.bashrc`, `~/.zshrc`, or equivalent shell configuration file:
+   ```bash
+   alias gitc="/path/to/git-commit-script.sh"
+   ```
+   
+   Then reload your shell configuration:
+   ```bash
+   source ~/.bashrc  # or source ~/.zshrc for Zsh users
+   ```
 
 ## Usage
 
@@ -40,6 +53,12 @@ Or if installed as a global command:
 
 ```bash
 git-cc [commit-type] "commit message" [git options]
+```
+
+Or if using the bash alias:
+
+```bash
+gitc [commit-type] "commit message" [git options]
 ```
 
 ### Commit Types
@@ -69,19 +88,19 @@ The script passes through all Git commit options, allowing you to use any option
 
 ```bash
 # Simple feature commit
-./git-commit-script.sh feat "Add user authentication"
+gitc feat "Add user authentication"
 
 # Fix with all changed files and skipped hooks
-./git-commit-script.sh fix "Resolve login redirect issue" -a --no-verify
+gitc fix "Resolve login redirect issue" -a --no-verify
 
 # Documentation update with signed commit
-./git-commit-script.sh docs "Update API documentation" -s
+gitc docs "Update API documentation" -s
 
 # Amend previous commit
-./git-commit-script.sh chore "Fix typo in previous commit" --amend
+gitc chore "Fix typo in previous commit" --amend
 
 # Complex example with multiple options
-./git-commit-script.sh refactor "Clean up authentication flow" -a -s --no-verify
+gitc refactor "Clean up authentication flow" -a -s --no-verify
 ```
 
 ## Branch Name Integration
@@ -95,7 +114,7 @@ The script automatically extracts ticket numbers from your branch name and adds 
 For example, if your current branch is `feature/ABC-123-new-login` and you run:
 
 ```bash
-./git-commit-script.sh feat "Implement login form" -a
+gitc feat "Implement login form" -a
 ```
 
 The resulting commit message will be:
@@ -103,6 +122,29 @@ The resulting commit message will be:
 ```
 feat: (#ABC-123) Implement login form
 ```
+
+## Setting Up Git Aliases
+
+You can also set up Git aliases for even more convenience:
+
+```bash
+# Add a Git alias to use the script
+git config --global alias.cc '!/path/to/git-commit-script.sh'
+```
+
+Then you can use:
+
+```bash
+git cc feat "Add new feature" -a
+```
+
+## Pre-commit Hooks Compatibility
+
+This script works seamlessly with pre-commit hooks:
+
+- By default, all configured Git hooks will run normally
+- Use the `-n` or `--no-verify` option to bypass hooks when needed
+- Works with hook managers like Husky, pre-commit, and native Git hooks
 
 ## Customization
 
