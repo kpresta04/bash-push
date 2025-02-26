@@ -1,13 +1,13 @@
 # Git Conventional Commit Script
 
-A bash script that simplifies the process of creating standardized git commit messages following the [Conventional Commits](https://www.conventionalcommits.org/) specification. This script automatically formats your commit messages and integrates ticket/issue numbers from your branch names.
+A bash script that simplifies the process of creating standardized git commit messages following the [Conventional Commits](https://www.conventionalcommits.org/) specification. This script automatically formats your commit messages, integrates ticket/issue numbers from your branch names, and supports all Git commit options.
 
 ## Features
 
 - Enforces conventional commit message format
 - Automatically extracts ticket numbers from branch names
 - Supports all standard conventional commit types
-- Option to bypass pre-commit hooks
+- Passes through any Git commit options
 - User-friendly command-line interface
 
 ## Installation
@@ -33,13 +33,13 @@ sudo mv git-commit-script.sh /usr/local/bin/git-cc
 ## Usage
 
 ```bash
-./git-commit-script.sh [commit-type] "commit message" [options]
+./git-commit-script.sh [commit-type] "commit message" [git options]
 ```
 
 Or if installed as a global command:
 
 ```bash
-git-cc [commit-type] "commit message" [options]
+git-cc [commit-type] "commit message" [git options]
 ```
 
 ### Commit Types
@@ -55,10 +55,15 @@ git-cc [commit-type] "commit message" [options]
 - `breaking`: Breaking changes
 - `perf`: Performance improvements
 
-### Options
+### Git Options
 
+The script passes through all Git commit options, allowing you to use any option supported by `git commit`. Common options include:
+
+- `-a, --all`: Commit all changed files
 - `-n, --no-verify`: Skip git hooks
-- `-h, --help`: Show help message
+- `--amend`: Amend previous commit
+- `-s, --signoff`: Add Signed-off-by line
+- `-S, --gpg-sign`: GPG sign commit
 
 ### Examples
 
@@ -66,11 +71,17 @@ git-cc [commit-type] "commit message" [options]
 # Simple feature commit
 ./git-commit-script.sh feat "Add user authentication"
 
-# Fix with skipped hooks
-./git-commit-script.sh fix "Resolve login redirect issue" --no-verify
+# Fix with all changed files and skipped hooks
+./git-commit-script.sh fix "Resolve login redirect issue" -a --no-verify
 
-# Documentation update
-./git-commit-script.sh docs "Update API documentation"
+# Documentation update with signed commit
+./git-commit-script.sh docs "Update API documentation" -s
+
+# Amend previous commit
+./git-commit-script.sh chore "Fix typo in previous commit" --amend
+
+# Complex example with multiple options
+./git-commit-script.sh refactor "Clean up authentication flow" -a -s --no-verify
 ```
 
 ## Branch Name Integration
@@ -84,7 +95,7 @@ The script automatically extracts ticket numbers from your branch name and adds 
 For example, if your current branch is `feature/ABC-123-new-login` and you run:
 
 ```bash
-./git-commit-script.sh feat "Implement login form"
+./git-commit-script.sh feat "Implement login form" -a
 ```
 
 The resulting commit message will be:
@@ -100,6 +111,7 @@ You can modify the script to:
 - Add new commit types
 - Modify the ticket number extraction regex
 - Adjust the output formatting
+- Change how Git options are handled
 
 ## Requirements
 
