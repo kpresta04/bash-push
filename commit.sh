@@ -5,12 +5,12 @@ COMMIT_TYPES=(fix feat docs style refactor test chore ci breaking perf)
 # Default values
 commit_type=""
 input_msg=""
-no_verify=false
+git_options=()
 show_help=false
 
 # Function to display help message
 show_usage() {
-    echo "Usage: $0 [commit-type] \"commit message\" [options]"
+    echo "Usage: $0 [commit-type] \"commit message\" [git options]"
     echo "Formats git commits using conventional commits standard."
     echo
     echo "Commit types:"
@@ -18,11 +18,16 @@ show_usage() {
         echo "  $type"
     done
     echo
-    echo "Options:"
-    echo "  -n, --no-verify    Skip git hooks"
-    echo "  -h, --help         Show this help message"
+    echo "Common git options:"
+    echo "  -a, --all            Commit all changed files"
+    echo "  -n, --no-verify      Skip git hooks"
+    echo "  --amend              Amend previous commit"
+    echo "  -s, --signoff        Add Signed-off-by line"
+    echo "  -S, --gpg-sign       GPG sign commit"
     echo
-    echo "Example: $0 feat \"Add new login feature\" --no-verify"
+    echo "Any valid git commit option can be used."
+    echo
+    echo "Example: $0 feat \"Add new login feature\" --no-verify --signoff"
     exit 0
 }
 
@@ -45,17 +50,19 @@ while [[ $# -gt 0 ]]; do
         continue
     fi
     
+    # Process other arguments
     case "$key" in
-        -n|--no-verify)
-            no_verify=true
-            ;;
         -h|--help)
             show_help=true
             ;;
+        -*)
+            # This is a git option, save it
+            git_options+=("$key")
+            ;;
         *)
-            # If we already have a message, append this argument to it
+            # If we already have a message, it's probably another option or argument for git
             if [[ -n "$input_msg" ]]; then
-                input_msg="$input_msg $key"
+                git_options+=("$key")
             else
                 input_msg="$key"
             fi
@@ -107,15 +114,22 @@ fi
 # Format the commit message
 commit_msg="$commit_prefix $input_msg"
 
-# Display the message before committing
+# Display the message and options before committing
 echo "Committing with message: $commit_msg"
-
-# Execute the commit
-if $no_verify; then
-    git commit -m "$commit_msg" -n
-else
-    git commit -m "$commit_msg"
+if [[ ${#git_options[@]} -gt 0 ]]; then
+    echo "Using git options: ${git_options[*]}"
 fi
+
+# Build the commit command
+commit_cmd=("git" "commit" "-m" "$commit_msg")
+
+# Add any additional git options
+if [[ ${#git_options[@]} -gt 0 ]]; then
+    commit_cmd+=("${git_options[@]}")
+fi
+
+# Execute the commit command
+"${commit_cmd[@]}"
 
 # Check if commit was successful
 if [[ $? -eq 0 ]]; then
