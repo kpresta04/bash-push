@@ -12,30 +12,18 @@ A bash script that simplifies the process of creating standardized git commit me
 
 ## Installation
 
-1. Download the script:
-
-```bash
-curl -o git-commit-script.sh https://your-script-location.com/git-commit-script.sh
-```
-
-2. Make it executable:
-
-```bash
-chmod +x git-commit-script.sh
-```
-
-3. Choose one of these options to make the script easily accessible:
+1. Choose one of these options to make the script easily accessible:
 
    **Option A: Move to a directory in your PATH**
    ```bash
-   sudo mv git-commit-script.sh /usr/local/bin/git-cc
+   sudo mv commit.sh /usr/local/bin/git-cc
    ```
 
    **Option B: Create a Bash alias**
    
    Add this line to your `~/.bashrc`, `~/.zshrc`, or equivalent shell configuration file:
    ```bash
-   alias gitc="/path/to/git-commit-script.sh"
+   alias gitc="/path/to/commit.sh"
    ```
    
    Then reload your shell configuration:
@@ -46,7 +34,7 @@ chmod +x git-commit-script.sh
 ## Usage
 
 ```bash
-./git-commit-script.sh [commit-type] "commit message" [git options]
+./commit.sh [commit-type] "commit message" [git options]
 ```
 
 Or if installed as a global command:
@@ -129,7 +117,7 @@ You can also set up Git aliases for even more convenience:
 
 ```bash
 # Add a Git alias to use the script
-git config --global alias.cc '!/path/to/git-commit-script.sh'
+git config --global alias.cc '!/path/to/commit.sh'
 ```
 
 Then you can use:
