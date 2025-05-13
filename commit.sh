@@ -7,6 +7,7 @@ commit_type=""
 input_msg=""
 git_options=()
 show_help=false
+use_date=false
 
 # Function to display help message
 show_usage() {
@@ -24,10 +25,12 @@ show_usage() {
     echo "  --amend              Amend previous commit"
     echo "  -s, --signoff        Add Signed-off-by line"
     echo "  -S, --gpg-sign       GPG sign commit"
+    echo "  -d, --date           Use current date as commit message (YYYY-MM-DD), sets type to chore"
     echo
     echo "Any valid git commit option can be used."
     echo
     echo "Example: $0 feat \"Add new login feature\" --no-verify --signoff"
+    echo "Example: $0 -d --all"
     exit 0
 }
 
@@ -55,6 +58,10 @@ while [[ $# -gt 0 ]]; do
         -h|--help)
             show_help=true
             ;;
+        -d|--date)
+            use_date=true
+            commit_type="chore:"
+            ;;
         -*)
             # This is a git option, save it
             git_options+=("$key")
@@ -80,6 +87,15 @@ fi
 if [[ -z "$commit_type" ]]; then
     echo "Error: Commit type is required."
     show_usage
+fi
+
+# Handle date flag
+if $use_date; then
+    if [[ -n "$input_msg" ]]; then
+        echo "Error: Cannot use -d/--date flag with a commit message."
+        show_usage
+    fi
+    input_msg="$(date +%Y-%m-%d)"
 fi
 
 if [[ -z "$input_msg" ]]; then
