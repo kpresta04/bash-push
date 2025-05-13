@@ -25,7 +25,7 @@ show_usage() {
     echo "  --amend              Amend previous commit"
     echo "  -s, --signoff        Add Signed-off-by line"
     echo "  -S, --gpg-sign       GPG sign commit"
-    echo "  -d, --date           Use current date as commit message (YYYY-MM-DD), sets type to chore"
+    echo "  -d, --date           Use current date and time as commit message (YYYY-MM-DD HH:MM:SS), sets type to chore"
     echo
     echo "Any valid git commit option can be used."
     echo
@@ -95,7 +95,7 @@ if $use_date; then
         echo "Error: Cannot use -d/--date flag with a commit message."
         show_usage
     fi
-    input_msg="$(date +%Y-%m-%d)"
+    input_msg="$(date +%Y-%m-%d\ %H:%M:%S)"
 fi
 
 if [[ -z "$input_msg" ]]; then
